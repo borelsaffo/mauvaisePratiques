@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-unsafe-app
+  labels:
+    app: my-unsafe-app
+spec:
+  replicas: 1 # Pas de redondance, pas de haute disponibilité
+  selector:
+    matchLabels:
+      app: my-unsafe-app
+  template:
+    metadata:
+      labels:
+        app: my-unsafe-app
+    spec:
+      hostIPC: true # Accès à l'espace de mémoire partagée de l'hôte
+      containers:
+      - name: my-unsafe-app
+        image: myapp:latest # Utilisation de "latest", rendant les déploiements imprévisibles
+        ports:
+        - containerPort: 80
+        resources: # Absence de limites de ressources
+          requests:
+            memory: "0"
+            cpu: "0"
+          limits:
+            memory: "0"
+            cpu: "0"
+        securityContext:
+          privileged: true # Exécution avec privilèges élevés
+          allowPrivilegeEscalation: true # Autoriser l'escalade des privilèges
+        env:
+        - name: SECRET_KEY
+          value: "12345" # Clés sensibles en clair dans le manifeste
+        volumeMounts: 
+        - mountPath: /host
+          name: host-volume # Volume monté depuis l'hôte
+      volumes:
+      - name: host-volume
+        hostPath:
+          path: / # Montage du répertoire racine de l'hôte, ce qui est extrêmement dangereux
+      restartPolicy: Always # Toujours redémarrer, même en cas d'erreur fatale
