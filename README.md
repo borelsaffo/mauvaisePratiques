@@ -18,6 +18,14 @@ Montage de volumes sensibles de l'hôte : Monter le répertoire racine de l'hôt
 
 Politique de redémarrage Always : Si l'application plante à cause d'une mauvaise configuration, elle redémarrera indéfiniment, masquant potentiellement les problèmes.
 
+Pourquoi hostIPC: true est une mauvaise pratique ?
+
+Risque de fuite d'informations : Avec hostIPC: true, le conteneur peut accéder à des segments de mémoire partagée de l'hôte ou d'autres conteneurs.
+Escalade des privilèges : Si un attaquant compromet le conteneur, il pourrait exploiter cette option pour accéder à des processus sensibles sur l'hôte.
+Sécurité isolée compromise : Une des promesses fondamentales des conteneurs est leur isolation. Cette option la brise.
+
+
+
 En résumé
 
 Ce manifeste YAML illustre exactement ce qu'il ne faut jamais faire dans un environnement Kubernetes. En production, il est crucial de suivre les bonnes 
