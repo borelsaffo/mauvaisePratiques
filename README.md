@@ -58,34 +58,73 @@
 Ces mauvaises pratiques compromettent la sécurité des déploiements Kubernetes. Adopter les bonnes pratiques associées est essentiel pour garantir une infrastructure robuste et sûre.
 
 
+# Analyse des Mauvaises Pratiques
 
-Analyse des mauvaises pratiques
+## 1. Nombre de réplicas insuffisant
+- **Problème** : Avec un seul replica, l'application n'est pas tolérante aux pannes.
+- **Impact** : En cas de panne ou d'interruption du pod unique, le service sera indisponible.
 
-Nombre de réplicas insuffisant : Avec un seul replica, l'application n'est pas tolérante aux pannes.
+---
 
-Image tag latest : L'utilisation de latest rend le déploiement imprévisible et difficile à reproduire.
+## 2. Utilisation de l'image tag `latest`
+- **Problème** : L'utilisation de `latest` rend le déploiement imprévisible et difficile à reproduire.
+- **Impact** : Le comportement du déploiement peut changer de manière inattendue lors de nouvelles exécutions.
 
-Pas de limites ou de demandes de ressources : Cela peut provoquer des conflits sur les ressources du cluster.
+---
 
-Exécution en mode privilégié : Donne à l'application un accès complet à l'hôte, exposant tout le système.
+## 3. Absence de limites ou de demandes de ressources
+- **Problème** : Cela peut provoquer des conflits sur les ressources du cluster.
+- **Impact** : Une application gourmande en ressources peut épuiser les capacités du cluster, entraînant des interruptions.
 
-Autorisation d'escalade des privilèges : Une faille dans l'application pourrait permettre à un attaquant de prendre le contrôle du conteneur et de l'hôte.
+---
 
-Variables d'environnement sensibles : Les secrets sont exposés en texte clair, ce qui est une faille de sécurité.
+## 4. Exécution en mode privilégié
+- **Problème** : Donne à l'application un accès complet à l'hôte, exposant tout le système.
+- **Impact** : Si une application compromise exploite ce mode, l'ensemble du nœud peut être contrôlé.
 
-Montage de volumes sensibles de l'hôte : Monter le répertoire racine de l'hôte met en danger l'intégrité et la sécurité de l'infrastructure.
+---
 
-Politique de redémarrage Always : Si l'application plante à cause d'une mauvaise configuration, elle redémarrera indéfiniment, masquant potentiellement les problèmes.
+## 5. Autorisation d'escalade des privilèges
+- **Problème** : Une faille dans l'application pourrait permettre à un attaquant de prendre le contrôle du conteneur et de l'hôte.
+- **Impact** : Accès non autorisé à des fonctionnalités critiques de l'hôte.
 
-Pourquoi hostIPC: true est une mauvaise pratique ?
+---
 
-Risque de fuite d'informations : Avec hostIPC: true, le conteneur peut accéder à des segments de mémoire partagée de l'hôte ou d'autres conteneurs.
-Escalade des privilèges : Si un attaquant compromet le conteneur, il pourrait exploiter cette option pour accéder à des processus sensibles sur l'hôte.
-Sécurité isolée compromise : Une des promesses fondamentales des conteneurs est leur isolation. Cette option la brise.
+## 6. Variables d'environnement sensibles
+- **Problème** : Les secrets sont exposés en texte clair dans le fichier de configuration ou les conteneurs.
+- **Impact** : Cela rend les informations sensibles facilement accessibles à des attaquants ou développeurs non autorisés.
 
+---
 
+## 7. Montage de volumes sensibles de l'hôte
+- **Problème** : Monter le répertoire racine de l'hôte met en danger l'intégrité et la sécurité de l'infrastructure.
+- **Impact** : Un pod compromis pourrait modifier des fichiers critiques de l'hôte.
 
-En résumé
+---
 
-Ce manifeste YAML illustre exactement ce qu'il ne faut jamais faire dans un environnement Kubernetes. En production, il est crucial de suivre les bonnes 
-pratiques, telles que définir des limites de ressources, éviter les privilèges inutiles et sécuriser les secrets via des outils comme Secrets.
+## 8. Politique de redémarrage `Always`
+- **Problème** : Si l'application plante à cause d'une mauvaise configuration, elle redémarrera indéfiniment.
+- **Impact** : Cela peut masquer les problèmes réels et entraîner une consommation inutile de ressources.
+
+---
+
+# Pourquoi `hostIPC: true` est une Mauvaise Pratique ?
+
+### 1. Risque de fuite d'informations
+- Avec `hostIPC: true`, le conteneur peut accéder à des segments de mémoire partagée de l'hôte ou d'autres conteneurs.
+
+### 2. Escalade des privilèges
+- Si un attaquant compromet le conteneur, il pourrait exploiter cette option pour accéder à des processus sensibles sur l'hôte.
+
+### 3. Sécurité isolée compromise
+- Une des promesses fondamentales des conteneurs est leur isolation. L'utilisation de `hostIPC: true` brise cette isolation, exposant l'hôte et d'autres conteneurs.
+
+---
+
+# En Résumé
+Ce manifeste YAML illustre exactement ce qu'il **ne faut jamais faire** dans un environnement Kubernetes.  
+En production, il est crucial de suivre les bonnes pratiques, telles que :
+1. **Définir des limites de ressources** pour éviter les conflits.
+2. **Éviter les privilèges inutiles** en désactivant les options comme `privileged` ou `hostIPC`.
+3. **Sécuriser les secrets** via des outils comme **Secrets Kubernetes**, et ne jamais les exposer en clair dans des configurations.
+
