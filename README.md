@@ -1,5 +1,3 @@
-# mauvaisePratiques
-
 # Mauvaises Pratiques de Sécurité dans Kubernetes
 
 ## 1. Mauvaises pratiques de configuration des conteneurs
