@@ -52,10 +52,6 @@
 
 ---
 
-## Conclusion
-Ces mauvaises pratiques compromettent la sécurité des déploiements Kubernetes. Adopter les bonnes pratiques associées est essentiel pour garantir une infrastructure robuste et sûre.
-
-
 # Analyse des Mauvaises Pratiques
 
 ## 1. Nombre de réplicas insuffisant
@@ -118,6 +114,8 @@ Ces mauvaises pratiques compromettent la sécurité des déploiements Kubernetes
 - Une des promesses fondamentales des conteneurs est leur isolation. L'utilisation de `hostIPC: true` brise cette isolation, exposant l'hôte et d'autres conteneurs.
 
 ---
+
+Ces mauvaises pratiques compromettent la sécurité des déploiements Kubernetes. Adopter les bonnes pratiques associées est essentiel pour garantir une infrastructure robuste et sûre.
 
 # En Résumé
 Nous illustrons ci-dessus exactement ce qu'il **ne faut jamais faire** dans un environnement Kubernetes.  
