@@ -122,7 +122,7 @@ Ces mauvaises pratiques compromettent la sécurité des déploiements Kubernetes
 ---
 
 # En Résumé
-Ce manifeste YAML illustre exactement ce qu'il **ne faut jamais faire** dans un environnement Kubernetes.  
+Nous illustrons ci-dessus exactement ce qu'il **ne faut jamais faire** dans un environnement Kubernetes.  
 En production, il est crucial de suivre les bonnes pratiques, telles que :
 1. **Définir des limites de ressources** pour éviter les conflits.
 2. **Éviter les privilèges inutiles** en désactivant les options comme `privileged` ou `hostIPC`.
